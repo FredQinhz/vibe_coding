@@ -139,4 +139,4 @@ dist
 
 # Custom for photo_watermark1
 photo_watermark1/target/
-photo_watermark1/photo_watermark/
+# photo_watermark1/photo_watermark/
