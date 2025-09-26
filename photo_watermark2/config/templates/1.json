@@ -1,0 +1,16 @@
+{
+    "text": "水印shuiyin!!!",
+    "font": "SimHei",
+    "font_size": 48,
+    "color": [
+        0,
+        0,
+        0
+    ],
+    "opacity": 0.5,
+    "position": [
+        1,
+        1
+    ],
+    "custom_position": null
+}
