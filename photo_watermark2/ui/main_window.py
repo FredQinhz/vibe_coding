@@ -489,9 +489,7 @@ class MainWindow(QMainWindow):
         try:
             # 尝试从样式表中提取颜色值
             style_sheet = self.color_button.styleSheet()
-            print(f"Style Sheet: {style_sheet}")  # 调试输出
             rgba_part = style_sheet.split("rgba(")[-1].split(")")[0]
-            print(f"RGBA Part: {rgba_part}")  # 调试输出
             color_values = rgba_part.split(",")
             
             # 提取RGB值
@@ -500,7 +498,6 @@ class MainWindow(QMainWindow):
                 g = int(color_values[1].strip())
                 b = int(color_values[2].strip())
                 self.watermark_settings.color = (r, g, b)
-                print(f"Extracted Color: ({r}, {g}, {b})")  # 调试输出
         except Exception as e:
             print(f"Error extracting color: {e}")
             # 如果解析失败，保持当前颜色不变

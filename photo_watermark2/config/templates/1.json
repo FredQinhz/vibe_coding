@@ -1,16 +1,36 @@
 {
-    "text": "水印shuiyin!!!",
+    "text": "水印TEST",
     "font": "SimHei",
-    "font_size": 48,
+    "font_size": 160,
     "color": [
+        170,
+        0,
+        0
+    ],
+    "opacity": 1.0,
+    "position": [
+        1,
+        0
+    ],
+    "custom_position": null,
+    "last_import_dir": "C:/Users/81453/Pictures/Camera Roll",
+    "last_export_dir": "",
+    "has_shadow": true,
+    "shadow_color": [
         0,
         0,
         0
     ],
-    "opacity": 0.5,
-    "position": [
-        1,
-        1
+    "shadow_offset": [
+        2,
+        2
     ],
-    "custom_position": null
+    "shadow_blur": 2,
+    "has_stroke": false,
+    "stroke_color": [
+        0,
+        0,
+        0
+    ],
+    "stroke_width": 1
 }
