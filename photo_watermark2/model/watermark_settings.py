@@ -24,6 +24,17 @@ class WatermarkSettings:
         # 自定义位置 (x_ratio, y_ratio)，相对于图片尺寸的比例
         # 如果不为None，则优先使用自定义位置
         self.custom_position = None
+        
+        # 阴影效果设置
+        self.has_shadow = False  # 默认禁用阴影
+        self.shadow_color = (0, 0, 0)  # 默认黑色阴影
+        self.shadow_offset = (2, 2)  # 默认阴影偏移
+        self.shadow_blur = 2  # 默认阴影模糊半径
+        
+        # 描边效果设置
+        self.has_stroke = False  # 默认禁用描边
+        self.stroke_color = (0, 0, 0)  # 默认黑色描边
+        self.stroke_width = 1  # 默认描边宽度
     
     def copy(self):
         """创建当前设置的副本"""
@@ -35,6 +46,13 @@ class WatermarkSettings:
         copy_settings.opacity = self.opacity
         copy_settings.position = self.position
         copy_settings.custom_position = self.custom_position
+        copy_settings.has_shadow = self.has_shadow
+        copy_settings.shadow_color = self.shadow_color
+        copy_settings.shadow_offset = self.shadow_offset
+        copy_settings.shadow_blur = self.shadow_blur
+        copy_settings.has_stroke = self.has_stroke
+        copy_settings.stroke_color = self.stroke_color
+        copy_settings.stroke_width = self.stroke_width
         return copy_settings
     
     def __str__(self):
@@ -42,7 +60,10 @@ class WatermarkSettings:
         return (
             f"WatermarkSettings(text='{self.text}', font='{self.font}', font_size={self.font_size}, "
             f"color={self.color}, opacity={self.opacity:.2f}, position={self.position}, "
-            f"custom_position={self.custom_position})"
+            f"custom_position={self.custom_position}, has_shadow={self.has_shadow}, "
+            f"shadow_color={self.shadow_color}, shadow_offset={self.shadow_offset}, "
+            f"shadow_blur={self.shadow_blur}, has_stroke={self.has_stroke}, "
+            f"stroke_color={self.stroke_color}, stroke_width={self.stroke_width})"
         )
     
     def is_valid(self):

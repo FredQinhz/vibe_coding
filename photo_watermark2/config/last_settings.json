@@ -1,21 +1,39 @@
 {
-    "text": "#THIS IS TEST@干活高",
+    "text": "水印shuiyin!!!",
     "font": "SimHei",
-    "font_size": 48,
+    "font_size": 160,
     "color": [
+        170,
         0,
-        255,
-        255
+        0
     ],
     "opacity": 1.0,
     "position": [
-        0,
+        1,
         1
     ],
     "custom_position": [
-        0.20751633986928106,
-        0.34011627906976744
+        0.27941176470588236,
+        0.4622093023255814
     ],
     "last_import_dir": "C:/Users/81453/Pictures/Screenshots",
-    "last_export_dir": ""
+    "last_export_dir": "",
+    "has_shadow": false,
+    "shadow_color": [
+        0,
+        0,
+        0
+    ],
+    "shadow_offset": [
+        2,
+        2
+    ],
+    "shadow_blur": 2,
+    "has_stroke": true,
+    "stroke_color": [
+        0,
+        0,
+        0
+    ],
+    "stroke_width": 1
 }

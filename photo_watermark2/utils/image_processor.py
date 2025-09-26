@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import os
 
 class ImageProcessor:
@@ -116,8 +116,105 @@ class ImageProcessor:
         r, g, b = watermark_settings.color
         fill_color = (r, g, b, int(watermark_settings.opacity * 255))
         
-        # 添加文本水印
-        draw.text((x, y), text, font=font, fill=fill_color)
+        # 处理阴影效果
+        if watermark_settings.has_shadow:
+            # 获取阴影颜色、偏移和模糊值
+            sh_r, sh_g, sh_b = watermark_settings.shadow_color
+            shadow_fill = (sh_r, sh_g, sh_b, 255)  # 阴影始终为不透明
+            shadow_offset_x, shadow_offset_y = watermark_settings.shadow_offset
+            shadow_blur = watermark_settings.shadow_blur
+            shadow_x = x + shadow_offset_x
+            shadow_y = y + shadow_offset_y
+            
+            # 创建一个临时图像用于绘制阴影
+            temp_img = Image.new('RGBA', (image_size[0], image_size[1]), (0, 0, 0, 0))
+            temp_draw = ImageDraw.Draw(temp_img)
+            
+            # 在临时图像上绘制阴影
+            if watermark_settings.has_stroke:
+                # 阴影也需要带描边
+                sr, sg, sb = watermark_settings.stroke_color
+                stroke_color = (sr, sg, sb, 255)
+                stroke_width = watermark_settings.stroke_width
+                
+                try:
+                    # 使用PIL的描边功能
+                    temp_draw.text((shadow_x, shadow_y), text, font=font, fill=shadow_fill,
+                                  stroke_width=stroke_width, stroke_fill=stroke_color)
+                except TypeError:
+                    # 替代方法
+                    directions = [(-1, -1), (-1, 0), (-1, 1),
+                                 (0, -1),          (0, 1),
+                                 (1, -1),  (1, 0), (1, 1)]
+                    
+                    # 绘制描边
+                    for dx, dy in directions:
+                        temp_draw.text((shadow_x + dx * stroke_width, shadow_y + dy * stroke_width), 
+                                     text, font=font, fill=stroke_color)
+                    
+                    # 绘制阴影文本
+                    temp_draw.text((shadow_x, shadow_y), text, font=font, fill=shadow_fill)
+            else:
+                # 阴影不带描边
+                temp_draw.text((shadow_x, shadow_y), text, font=font, fill=shadow_fill)
+            
+            # 应用模糊效果
+            if shadow_blur > 0:
+                # 计算需要裁剪的区域，以提高模糊效率
+                # 获取文本边界
+                try:
+                    bbox = temp_draw.textbbox((shadow_x, shadow_y), text, font=font)
+                    text_width = bbox[2] - bbox[0]
+                    text_height = bbox[3] - bbox[1]
+                except AttributeError:
+                    text_width, text_height = temp_draw.textsize(text, font=font)
+                
+                # 添加模糊半径的缓冲区
+                buffer = shadow_blur * 2
+                crop_box = (
+                    max(0, shadow_x - buffer),
+                    max(0, shadow_y - buffer),
+                    min(image_size[0], shadow_x + text_width + buffer),
+                    min(image_size[1], shadow_y + text_height + buffer)
+                )
+                
+                # 裁剪并模糊
+                shadow_cropped = temp_img.crop(crop_box)
+                shadow_blurred = shadow_cropped.filter(ImageFilter.GaussianBlur(radius=shadow_blur))
+                
+                # 将模糊后的阴影粘贴回原始图像
+                draw.bitmap((crop_box[0], crop_box[1]), shadow_blurred, fill=None)
+            else:
+                # 没有模糊效果，直接粘贴
+                draw.bitmap((0, 0), temp_img, fill=None)
+        
+        # 处理描边效果
+        if watermark_settings.has_stroke:
+            # 获取描边颜色和宽度
+            sr, sg, sb = watermark_settings.stroke_color
+            stroke_color = (sr, sg, sb, 255)
+            stroke_width = watermark_settings.stroke_width
+            
+            try:
+                # 使用PIL的描边功能
+                draw.text((x, y), text, font=font, fill=fill_color,
+                          stroke_width=stroke_width, stroke_fill=stroke_color)
+            except TypeError:
+                # 替代方法
+                directions = [(-1, -1), (-1, 0), (-1, 1),
+                             (0, -1),          (0, 1),
+                             (1, -1),  (1, 0), (1, 1)]
+                
+                # 绘制描边
+                for dx, dy in directions:
+                    draw.text((x + dx * stroke_width, y + dy * stroke_width), 
+                              text, font=font, fill=stroke_color)
+                
+                # 绘制主文本
+                draw.text((x, y), text, font=font, fill=fill_color)
+        else:
+            # 没有描边效果，直接绘制主文本
+            draw.text((x, y), text, font=font, fill=fill_color)
     
     def _calculate_text_position(self, watermark_settings, image_size, text_width, text_height):
         """计算文本水印的位置"""

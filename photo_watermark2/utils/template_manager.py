@@ -141,7 +141,16 @@ class TemplateManager:
             "position": settings.position,
             "custom_position": settings.custom_position,
             "last_import_dir": getattr(settings, 'last_import_dir', ''),
-            "last_export_dir": getattr(settings, 'last_export_dir', '')
+            "last_export_dir": getattr(settings, 'last_export_dir', ''),
+            # 阴影效果相关设置
+            "has_shadow": getattr(settings, 'has_shadow', False),
+            "shadow_color": getattr(settings, 'shadow_color', (0, 0, 0)),
+            "shadow_offset": getattr(settings, 'shadow_offset', (2, 2)),
+            "shadow_blur": getattr(settings, 'shadow_blur', 2),
+            # 描边效果相关设置
+            "has_stroke": getattr(settings, 'has_stroke', False),
+            "stroke_color": getattr(settings, 'stroke_color', (0, 0, 0)),
+            "stroke_width": getattr(settings, 'stroke_width', 1)
         }
     
     def _dict_to_settings(self, settings_dict):
@@ -179,6 +188,33 @@ class TemplateManager:
             
         if "last_export_dir" in settings_dict:
             settings.last_export_dir = settings_dict["last_export_dir"]
+        
+        # 加载阴影效果相关设置
+        if "has_shadow" in settings_dict:
+            settings.has_shadow = settings_dict["has_shadow"]
+        
+        if "shadow_color" in settings_dict:
+            settings.shadow_color = settings_dict["shadow_color"]
+        
+        if "shadow_offset" in settings_dict:
+            shadow_offset = settings_dict["shadow_offset"]
+            if isinstance(shadow_offset, list):
+                settings.shadow_offset = tuple(shadow_offset)
+            else:
+                settings.shadow_offset = shadow_offset
+        
+        if "shadow_blur" in settings_dict:
+            settings.shadow_blur = settings_dict["shadow_blur"]
+        
+        # 加载描边效果相关设置
+        if "has_stroke" in settings_dict:
+            settings.has_stroke = settings_dict["has_stroke"]
+        
+        if "stroke_color" in settings_dict:
+            settings.stroke_color = settings_dict["stroke_color"]
+        
+        if "stroke_width" in settings_dict:
+            settings.stroke_width = settings_dict["stroke_width"]
         
         return settings
     

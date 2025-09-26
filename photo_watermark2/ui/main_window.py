@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
                             QLabel, QFileDialog, QListWidget, QListWidgetItem, QScrollArea,
                             QGridLayout, QSlider, QComboBox, QLineEdit, QFrame, QColorDialog,
-                            QGroupBox, QSplitter, QMessageBox, QInputDialog)
+                            QGroupBox, QSplitter, QMessageBox, QInputDialog, QCheckBox, QSpinBox)
 from PyQt5.QtGui import QPixmap, QImage, QFont, QPainter, QColor, QPen, QIcon
 from PyQt5.QtCore import Qt, QPoint, QSize, QRect
 import os
@@ -139,7 +139,8 @@ class MainWindow(QMainWindow):
         font_size_layout = QHBoxLayout()
         font_size_layout.addWidget(QLabel("字号："))
         self.font_size_combo = QComboBox()
-        self.font_size_combo.addItems(["12", "16", "20", "24", "32", "48"])
+        # 增加更多字号选项，从8到128，以4为步长增加常用字号，并添加一些较大的字号
+        self.font_size_combo.addItems(["8", "10", "12", "14", "16", "18", "20", "24", "28", "32", "36", "40", "48", "64", "72", "96", "128", "160", "200"])
         self.font_size_combo.setCurrentText("24")
         self.font_size_combo.currentTextChanged.connect(self.update_preview)
         font_size_layout.addWidget(self.font_size_combo)
@@ -165,6 +166,104 @@ class MainWindow(QMainWindow):
         opacity_layout.addWidget(QLabel("50%"))
         self.opacity_slider.valueChanged.connect(lambda value: opacity_layout.itemAt(2).widget().setText(f"{value}%"))
         watermark_layout.addLayout(opacity_layout)
+        
+        # 样式效果分割线
+        line = QFrame()
+        line.setFrameShape(QFrame.HLine)
+        line.setFrameShadow(QFrame.Sunken)
+        watermark_layout.addWidget(line)
+        
+        # 阴影效果设置
+        shadow_layout = QVBoxLayout()
+        shadow_header_layout = QHBoxLayout()
+        self.shadow_checkbox = QCheckBox("阴影效果")
+        self.shadow_checkbox.stateChanged.connect(self.update_preview)
+        shadow_header_layout.addWidget(self.shadow_checkbox)
+        shadow_layout.addLayout(shadow_header_layout)
+        
+        # 阴影设置控件组，默认隐藏
+        self.shadow_settings_widget = QWidget()
+        shadow_settings_layout = QVBoxLayout(self.shadow_settings_widget)
+        
+        # 阴影颜色
+        shadow_color_layout = QHBoxLayout()
+        shadow_color_layout.addWidget(QLabel("阴影颜色："))
+        self.shadow_color_button = QPushButton()
+        self.shadow_color_button.setStyleSheet("background-color: rgb(0, 0, 0);")
+        self.shadow_color_button.clicked.connect(self.choose_shadow_color)
+        shadow_color_layout.addWidget(self.shadow_color_button)
+        shadow_settings_layout.addLayout(shadow_color_layout)
+        
+        # 阴影偏移
+        shadow_offset_layout = QHBoxLayout()
+        shadow_offset_layout.addWidget(QLabel("偏移："))
+        self.shadow_offset_x = QSpinBox()
+        self.shadow_offset_x.setRange(-10, 10)
+        self.shadow_offset_x.setValue(2)
+        self.shadow_offset_x.valueChanged.connect(self.update_preview)
+        shadow_offset_layout.addWidget(QLabel("X:"))
+        shadow_offset_layout.addWidget(self.shadow_offset_x)
+        
+        self.shadow_offset_y = QSpinBox()
+        self.shadow_offset_y.setRange(-10, 10)
+        self.shadow_offset_y.setValue(2)
+        self.shadow_offset_y.valueChanged.connect(self.update_preview)
+        shadow_offset_layout.addWidget(QLabel("Y:"))
+        shadow_offset_layout.addWidget(self.shadow_offset_y)
+        shadow_settings_layout.addLayout(shadow_offset_layout)
+        
+        # 阴影模糊
+        shadow_blur_layout = QHBoxLayout()
+        shadow_blur_layout.addWidget(QLabel("模糊："))
+        self.shadow_blur = QSpinBox()
+        self.shadow_blur.setRange(0, 20)
+        self.shadow_blur.setValue(2)
+        self.shadow_blur.valueChanged.connect(self.update_preview)
+        shadow_blur_layout.addWidget(self.shadow_blur)
+        shadow_settings_layout.addLayout(shadow_blur_layout)
+        
+        shadow_layout.addWidget(self.shadow_settings_widget)
+        self.shadow_settings_widget.setVisible(False)
+        self.shadow_checkbox.stateChanged.connect(lambda state: self.shadow_settings_widget.setVisible(state == Qt.Checked))
+        
+        watermark_layout.addLayout(shadow_layout)
+        
+        # 描边效果设置
+        stroke_layout = QVBoxLayout()
+        stroke_header_layout = QHBoxLayout()
+        self.stroke_checkbox = QCheckBox("描边效果")
+        self.stroke_checkbox.stateChanged.connect(self.update_preview)
+        stroke_header_layout.addWidget(self.stroke_checkbox)
+        stroke_layout.addLayout(stroke_header_layout)
+        
+        # 描边设置控件组，默认隐藏
+        self.stroke_settings_widget = QWidget()
+        stroke_settings_layout = QVBoxLayout(self.stroke_settings_widget)
+        
+        # 描边颜色
+        stroke_color_layout = QHBoxLayout()
+        stroke_color_layout.addWidget(QLabel("描边颜色："))
+        self.stroke_color_button = QPushButton()
+        self.stroke_color_button.setStyleSheet("background-color: rgb(0, 0, 0);")
+        self.stroke_color_button.clicked.connect(self.choose_stroke_color)
+        stroke_color_layout.addWidget(self.stroke_color_button)
+        stroke_settings_layout.addLayout(stroke_color_layout)
+        
+        # 描边宽度
+        stroke_width_layout = QHBoxLayout()
+        stroke_width_layout.addWidget(QLabel("描边宽度："))
+        self.stroke_width = QSpinBox()
+        self.stroke_width.setRange(1, 10)
+        self.stroke_width.setValue(1)
+        self.stroke_width.valueChanged.connect(self.update_preview)
+        stroke_width_layout.addWidget(self.stroke_width)
+        stroke_settings_layout.addLayout(stroke_width_layout)
+        
+        stroke_layout.addWidget(self.stroke_settings_widget)
+        self.stroke_settings_widget.setVisible(False)
+        self.stroke_checkbox.stateChanged.connect(lambda state: self.stroke_settings_widget.setVisible(state == Qt.Checked))
+        
+        watermark_layout.addLayout(stroke_layout)
         
         watermark_group.setLayout(watermark_layout)
         right_layout.addWidget(watermark_group)
@@ -408,6 +507,53 @@ class MainWindow(QMainWindow):
         
         # 透明度设置
         self.watermark_settings.opacity = self.opacity_slider.value() / 100.0
+        
+        # 阴影效果设置
+        self.watermark_settings.has_shadow = self.shadow_checkbox.isChecked()
+        
+        # 阴影颜色设置
+        try:
+            # 从样式表中提取颜色值
+            shadow_style_sheet = self.shadow_color_button.styleSheet()
+            if "rgb(" in shadow_style_sheet:
+                rgb_part = shadow_style_sheet.split("rgb(")[-1].split(")")[0]
+                shadow_color_values = rgb_part.split(",")
+                if len(shadow_color_values) >= 3:
+                    sr = int(shadow_color_values[0].strip())
+                    sg = int(shadow_color_values[1].strip())
+                    sb = int(shadow_color_values[2].strip())
+                    self.watermark_settings.shadow_color = (sr, sg, sb)
+        except Exception as e:
+            print(f"Error extracting shadow color: {e}")
+            # 如果解析失败，保持当前颜色不变
+        
+        # 阴影偏移设置
+        self.watermark_settings.shadow_offset = (self.shadow_offset_x.value(), self.shadow_offset_y.value())
+        
+        # 阴影模糊设置
+        self.watermark_settings.shadow_blur = self.shadow_blur.value()
+        
+        # 描边效果设置
+        self.watermark_settings.has_stroke = self.stroke_checkbox.isChecked()
+        
+        # 描边颜色设置
+        try:
+            # 从样式表中提取颜色值
+            stroke_style_sheet = self.stroke_color_button.styleSheet()
+            if "rgb(" in stroke_style_sheet:
+                rgb_part = stroke_style_sheet.split("rgb(")[-1].split(")")[0]
+                stroke_color_values = rgb_part.split(",")
+                if len(stroke_color_values) >= 3:
+                    str_r = int(stroke_color_values[0].strip())
+                    stg = int(stroke_color_values[1].strip())
+                    stb = int(stroke_color_values[2].strip())
+                    self.watermark_settings.stroke_color = (str_r, stg, stb)
+        except Exception as e:
+            print(f"Error extracting stroke color: {e}")
+            # 如果解析失败，保持当前颜色不变
+        
+        # 描边宽度设置
+        self.watermark_settings.stroke_width = self.stroke_width.value()
     
     def choose_color(self):
         """选择水印颜色"""
@@ -417,6 +563,26 @@ class MainWindow(QMainWindow):
             opacity = int(self.opacity_slider.value() * 2.55)
             self.color_button.setStyleSheet(
                 f"background-color: rgba({color.red()}, {color.green()}, {color.blue()}, {opacity});"
+            )
+            self.update_preview()
+    
+    def choose_shadow_color(self):
+        """选择阴影颜色"""
+        color = QColorDialog.getColor()
+        if color.isValid():
+            # 设置按钮背景色（阴影颜色不考虑透明度，始终为不透明）
+            self.shadow_color_button.setStyleSheet(
+                f"background-color: rgb({color.red()}, {color.green()}, {color.blue()});"
+            )
+            self.update_preview()
+    
+    def choose_stroke_color(self):
+        """选择描边颜色"""
+        color = QColorDialog.getColor()
+        if color.isValid():
+            # 设置按钮背景色（描边颜色不考虑透明度，始终为不透明）
+            self.stroke_color_button.setStyleSheet(
+                f"background-color: rgb({color.red()}, {color.green()}, {color.blue()});"
             )
             self.update_preview()
     
