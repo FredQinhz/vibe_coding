@@ -130,7 +130,12 @@ class MainWindow(QMainWindow):
         font_layout = QHBoxLayout()
         font_layout.addWidget(QLabel("字体："))
         self.font_combo = QComboBox()
-        self.font_combo.addItems(["SimHei", "Microsoft YaHei", "Arial", "Times New Roman"])
+        # 添加更多系统字体选项，包括中文字体和英文字体
+        self.font_combo.addItems([
+            "SimHei", "Microsoft YaHei", "Arial", "Times New Roman",
+            "宋体", "新宋体", "仿宋", "楷体", "微软雅黑 Light",
+            "微软正黑", "Courier New", "Verdana", "Comic Sans MS", "Impact"
+        ])
         self.font_combo.currentTextChanged.connect(self.update_preview)
         font_layout.addWidget(self.font_combo)
         watermark_layout.addLayout(font_layout)

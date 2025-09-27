@@ -66,6 +66,59 @@ class ImageProcessor:
                 "C:/Windows/Fonts/timesbd.ttf",  # Windows Times New Roman 粗体
                 "/Library/Fonts/Times New Roman.ttf",  # macOS Times New Roman
                 "/usr/share/fonts/truetype/msttcorefonts/times.ttf"  # Linux Times New Roman
+            ],
+            "宋体": [
+                "C:/Windows/Fonts/simsun.ttc",  # Windows 宋体
+                "/Library/Fonts/Songti.ttc",  # macOS 宋体
+                "/usr/share/fonts/windows/simsun.ttc"  # Linux 宋体
+            ],
+            "新宋体": [
+                "C:/Windows/Fonts/nsimsun.ttc",  # Windows 新宋体
+                "/Library/Fonts/Songti.ttc",  # macOS 宋体（作为备选）
+                "/usr/share/fonts/windows/nsimsun.ttc"  # Linux 新宋体
+            ],
+            "仿宋": [
+                "C:/Windows/Fonts/simfang.ttf",  # Windows 仿宋
+                "C:/Windows/Fonts/STFANGSO.TTF",  # Windows 仿宋_GB2312
+                "/usr/share/fonts/windows/simfang.ttf"  # Linux 仿宋
+            ],
+            "楷体": [
+                "C:/Windows/Fonts/simkai.ttf",  # Windows 楷体
+                "C:/Windows/Fonts/STKAITI.TTF",  # Windows 楷体_GB2312
+                "/usr/share/fonts/windows/simkai.ttf"  # Linux 楷体
+            ],
+            "微软雅黑 Light": [
+                "C:/Windows/Fonts/msyhl.ttc",  # Windows 微软雅黑 Light
+                "/Library/Fonts/Microsoft YaHei Light.ttf",  # macOS 微软雅黑 Light
+                "/usr/share/fonts/windows/msyhl.ttc"  # Linux 微软雅黑 Light
+            ],
+            "微软正黑": [
+                "C:/Windows/Fonts/msjh.ttc",  # Windows 微软正黑
+                "C:/Windows/Fonts/msjhbd.ttc",  # Windows 微软正黑加粗
+                "/Library/Fonts/Microsoft JhengHei.ttf"  # macOS 微软正黑体
+            ],
+            "Courier New": [
+                "C:/Windows/Fonts/cour.ttf",  # Windows Courier New
+                "C:/Windows/Fonts/courbd.ttf",  # Windows Courier New 粗体
+                "/Library/Fonts/Courier New.ttf",  # macOS Courier New
+                "/usr/share/fonts/truetype/msttcorefonts/cour.ttf"  # Linux Courier New
+            ],
+            "Verdana": [
+                "C:/Windows/Fonts/verdana.ttf",  # Windows Verdana
+                "C:/Windows/Fonts/verdanab.ttf",  # Windows Verdana 粗体
+                "/Library/Fonts/Verdana.ttf",  # macOS Verdana
+                "/usr/share/fonts/truetype/msttcorefonts/verdana.ttf"  # Linux Verdana
+            ],
+            "Comic Sans MS": [
+                "C:/Windows/Fonts/comic.ttf",  # Windows Comic Sans MS
+                "C:/Windows/Fonts/comicbd.ttf",  # Windows Comic Sans MS 粗体
+                "/Library/Fonts/Comic Sans MS.ttf",  # macOS Comic Sans MS
+                "/usr/share/fonts/truetype/msttcorefonts/comic.ttf"  # Linux Comic Sans MS
+            ],
+            "Impact": [
+                "C:/Windows/Fonts/impact.ttf",  # Windows Impact
+                "/Library/Fonts/Impact.ttf",  # macOS Impact
+                "/usr/share/fonts/truetype/msttcorefonts/impact.ttf"  # Linux Impact
             ]
         }
         
