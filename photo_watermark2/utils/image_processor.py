@@ -1,5 +1,5 @@
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import os
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 class ImageProcessor:
     """图片处理器，负责图片的加载、处理和保存"""
@@ -238,8 +238,27 @@ class ImageProcessor:
                 # 将模糊后的阴影粘贴回原始图像
                 draw.bitmap((crop_box[0], crop_box[1]), shadow_blurred, fill=None)
             else:
-                # 没有模糊效果，直接粘贴
-                draw.bitmap((0, 0), temp_img, fill=None)
+                # 没有模糊效果，也使用裁剪方式粘贴阴影
+                # 获取文本边界
+                try:
+                    bbox = temp_draw.textbbox((shadow_x, shadow_y), text, font=font)
+                    text_width = bbox[2] - bbox[0]
+                    text_height = bbox[3] - bbox[1]
+                except AttributeError:
+                    text_width, text_height = temp_draw.textsize(text, font=font)
+                
+                # 添加少量缓冲区
+                buffer = 2
+                crop_box = (
+                    max(0, shadow_x - buffer),
+                    max(0, shadow_y - buffer),
+                    min(image_size[0], shadow_x + text_width + buffer),
+                    min(image_size[1], shadow_y + text_height + buffer)
+                )
+                
+                # 裁剪并粘贴
+                shadow_cropped = temp_img.crop(crop_box)
+                draw.bitmap((crop_box[0], crop_box[1]), shadow_cropped, fill=None)
         
         # 处理描边效果
         if watermark_settings.has_stroke:

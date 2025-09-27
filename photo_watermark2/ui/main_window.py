@@ -572,10 +572,19 @@ class MainWindow(QMainWindow):
         """选择阴影颜色"""
         color = QColorDialog.getColor()
         if color.isValid():
+            # 直接设置水印设置中的阴影颜色
+            self.watermark_settings.shadow_color = (color.red(), color.green(), color.blue())
+            
             # 设置按钮背景色（阴影颜色不考虑透明度，始终为不透明）
             self.shadow_color_button.setStyleSheet(
                 f"background-color: rgb({color.red()}, {color.green()}, {color.blue()});"
             )
+            
+            # 如果阴影未启用，自动启用阴影
+            if not self.watermark_settings.has_shadow:
+                self.shadow_checkbox.setChecked(True)
+                self.watermark_settings.has_shadow = True
+                
             self.update_preview()
     
     def choose_stroke_color(self):
@@ -768,6 +777,40 @@ class MainWindow(QMainWindow):
         
         # 应用透明度设置
         self.opacity_slider.setValue(int(settings.opacity * 100))
+        
+        # 应用阴影设置
+        self.shadow_checkbox.setChecked(settings.has_shadow)
+        self.shadow_settings_widget.setVisible(settings.has_shadow)
+        
+        # 设置阴影颜色
+        sr, sg, sb = getattr(settings, 'shadow_color', (0, 0, 0))
+        self.shadow_color_button.setStyleSheet(
+            f"background-color: rgb({sr}, {sg}, {sb});"
+        )
+        
+        # 设置阴影偏移
+        shadow_offset = getattr(settings, 'shadow_offset', (2, 2))
+        if isinstance(shadow_offset, (list, tuple)) and len(shadow_offset) == 2:
+            self.shadow_offset_x.setValue(shadow_offset[0])
+            self.shadow_offset_y.setValue(shadow_offset[1])
+        
+        # 设置阴影模糊
+        shadow_blur = getattr(settings, 'shadow_blur', 2)
+        self.shadow_blur.setValue(shadow_blur)
+        
+        # 应用描边设置
+        self.stroke_checkbox.setChecked(settings.has_stroke)
+        self.stroke_settings_widget.setVisible(settings.has_stroke)
+        
+        # 设置描边颜色
+        str_r, stg, stb = getattr(settings, 'stroke_color', (0, 0, 0))
+        self.stroke_color_button.setStyleSheet(
+            f"background-color: rgb({str_r}, {stg}, {stb});"
+        )
+        
+        # 设置描边宽度
+        stroke_width = getattr(settings, 'stroke_width', 1)
+        self.stroke_width.setValue(stroke_width)
         
         # 应用位置设置
         if settings.position:

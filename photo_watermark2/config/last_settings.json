@@ -1,39 +1,36 @@
 {
     "text": "水印shuiyin!!!",
-    "font": "SimHei",
+    "font": "新宋体",
     "font_size": 160,
     "color": [
-        170,
-        0,
+        255,
+        255,
         0
     ],
     "opacity": 1.0,
     "position": [
         1,
-        1
+        0
     ],
-    "custom_position": [
-        0.27941176470588236,
-        0.4622093023255814
-    ],
+    "custom_position": null,
     "last_import_dir": "C:/Users/81453/Pictures/Screenshots",
     "last_export_dir": "",
-    "has_shadow": false,
+    "has_shadow": true,
     "shadow_color": [
-        0,
+        170,
         0,
         0
     ],
     "shadow_offset": [
-        2,
-        2
+        10,
+        10
     ],
-    "shadow_blur": 2,
+    "shadow_blur": 1,
     "has_stroke": true,
     "stroke_color": [
-        0,
-        0,
-        0
+        85,
+        255,
+        255
     ],
-    "stroke_width": 1
+    "stroke_width": 7
 }
